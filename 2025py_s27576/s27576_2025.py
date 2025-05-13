@@ -1,24 +1,60 @@
 import random
 import os
 
+'''
+Program do generowania losowej sekwencji DNA i zapisywania jej w formacie FASTA
+ 
+Użytkownik podaje długość sekwencji, identyfikator (ID), opis oraz swoje imię
+Program:
+ - generuje losową sekwencję nukleotydową (A, C, G, T),
+ - losowo wstawia imię użytkownika do sekwencji,
+ - oblicza statystyki zawartości nukleotydów oraz %CG,
+ - zapisuje dane do pliku FASTA z odpowiednim nagłówkiem
+ 
+ Przeznaczenie:
+  - nauka przetwarzania danych biologicznych,
+  - ćwiczenia z pracy na plikach, losowością i walidacją danych'
+  - wprowadzenie do bioinformatyki i operacji na sekwencjach DNA
+  '''
 
-"""Generuje losową sekwencję DNA"""
+
+
 def generate_random_sequence(length: int) -> str:
+    """
+    Generuje losową sekwencję DNA o zadanej długości
+    Args:
+        length (int): Długość żądanej sekwencji DNA. Musi być > 0
+    Returns:
+        str: Sekwencja DNA złożona z losowych nukleotydów A, C, G, T
+    Raises:
+        ValueError: Jeśli długość jest mniejsza lub równa 0
+    """
+
     #ORIGINAL
     #brak
 
     #MODIFIED (zabeczpiecznie przed złym parametrem długości sekwencji)
-    if length <= 0:                                                         #sprawdza czy podana wartość jest dodatnia
-        raise ValueError("Długość sekwencji musi być większa niż 0")        #jesli nie, rzuca wyjątek o złym parametrze
+    if length <= 0:                                                         # sprawdza czy podana wartość jest dodatnia
+        raise ValueError("Długość sekwencji musi być większa niż 0")        # jesli nie, rzuca wyjątek o złym parametrze
 
 
     nucleotides = ['A', 'C', 'G', 'T']                                      # Lista możliwych nukleotydów do generowania sekwencji
 
-    return ''.join(random.choice(nucleotides) for _ in range(length))       #Zwraca sekwencję DNA jako ciąg losowo wybranych nukleotydów
+    return ''.join(random.choice(nucleotides) for _ in range(length))       # Zwraca sekwencję DNA jako ciąg losowo wybranych nukleotydów
 
 
-"""Oblicza statystyki sekwencji DNA."""
+
 def calculate_statistics(sequence: str):
+    """
+    Oblicza statystyki procentowe zawartości nukleotydów i procent CG
+    Args:
+        sequence (str): Sekwencja DNA
+    Returns:
+        tuple:
+             - dict: Procentowy udział A, C, G, T w sekwencji
+            - float: Procent całkowitej zawartości C i G (CG)
+    """
+
     length = len(sequence)                                                              # Oblicza długość sekwencji
     counts = {nucleotide: sequence.count(nucleotide) for nucleotide in "ACGT"}          # Liczy wystąpienia każdego nukleotydu w sekwencji
     percentages = {k: (v / length) * 100 for k, v in counts.items()}                    # Oblicza procentowy udział każdego nukleotydu
@@ -32,8 +68,17 @@ def calculate_statistics(sequence: str):
     return percentages, cg_percentage                                                   # Zwraca słownik z procentami oraz wartość CG
 
 
-"""Wstawia imię w losowe miejsce sekwencji."""
+
+
 def insert_name_in_sequence(sequence: str, name: str) -> str:
+    """
+    Wstawia imię w losowe miejsce sekwencji DNA
+    Args:
+        sequence (str): Oryginalna sekwencja DNA
+        name (str): Imię do wstawienia
+    Returns:
+        str: Sekwencja z imieniem w losowym miejscu
+    """
     insert_position = random.randint(0, len(sequence))                              # Losuje pozycję, gdzie wstawi imię w sekwencji
     return sequence[:insert_position] + name + sequence[insert_position:]              # Wstawia imię w wybranej pozycji
 
@@ -43,12 +88,23 @@ def insert_name_in_sequence(sequence: str, name: str) -> str:
 # brak
 
 #MODIFIED (dodanie metody sprawdzającej czy sekwencja o danym identyfikatorze juz nie istnieje, zapewnia spójność danych)
-"""Sprawdza, czy plik FASTA o danym ID już istnieje w katalogu."""
 def sequence_file_exists(seq_id: str, directory: str = ".") -> bool:
+    """
+    Sprawdza, czy plik FASTA o danym ID już istnieje w katalogu
+    Args:
+        seq_id (str): Identyfikator sekwencji
+        directory (str, optional): Katalog, w którym szukać pliku. Domyślnie bieżący
+    Returns:
+        bool: True, jeśli plik nie istnieje
+    Raises:
+        ValueError: Jeśli plik o tej nazwie już istnieje
+    """
     fasta_filename = os.path.join(directory, f"{seq_id}.fasta")           # Tworzy pełną ścieżkę do pliku na podstawie ID
 
     if os.path.isfile(fasta_filename):                                    # Sprawdza, czy plik już istnieje
         raise ValueError(f"Plik '{fasta_filename}' już istnieje.")        # Jeśli tak, rzuca wyjątek
+
+
 
 
 
@@ -93,4 +149,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()                                                 # Uruchomienie main'a
