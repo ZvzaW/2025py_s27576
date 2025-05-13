@@ -81,9 +81,11 @@ def main():
             fasta_file.write(sequence_with_name[i:i + 80] + "\n")
 
 
+    print(f"\nSekwencja została zapisana do pliku {fasta_filename}")              # Wyświetla informacje o zapisie sekwencji do pliku
+
 
     # Wyświetla statystyki
-    print("\nStatystyki sekwencji:")
+    print("Statystyki sekwencji:")
     for nucleotide, percentage in stats.items():           # Dla każdego nukleotydu wyświetla procent
         print(f"{nucleotide}: {percentage:.2f}%")
 
